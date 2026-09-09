@@ -5,10 +5,24 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  copilot-requests: write
+
 jobs:
-  test:
+  copilot:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test GitHub Action
-        run: echo "GitHub Action triggered successfully!"
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot
+
+      - name: Run Copilot CLI
+        run: copilot -p "Review the current repository and summarize any issues you find."
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
