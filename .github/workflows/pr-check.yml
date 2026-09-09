@@ -25,4 +25,4 @@ jobs:
       - name: Run Copilot CLI
         run: copilot -p "Review the current repository and summarize any issues you find."
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
