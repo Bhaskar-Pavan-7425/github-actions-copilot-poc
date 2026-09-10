@@ -1,0 +1,42 @@
+name: Copilot Direct Fix
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  copilot-requests: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot
+
+      - name: Run Copilot CLI to fix code
+        run: |
+          copilot -p "Review calculator.py and test_calculator.py. Identify the failing issue, fix the code, and run the test. Make only the necessary code changes." \
+            --allow-tool='write' \
+            --allow-tool='shell(python)' \
+            --no-ask-user
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run tests
+        run: python -m unittest test_calculator.py
+
+      - name: Commit and push fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add calculator.py test_calculator.py
+          git commit -m "fix: resolve calculator issue" || echo "No changes to commit"
+          git push
