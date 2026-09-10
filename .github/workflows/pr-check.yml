@@ -25,11 +25,12 @@ jobs:
 
       - name: Run Copilot CLI
         run: |
-          copilot -p "Review the current repository and summarize any issues you find.  Write your complete review to review.md" \
+          copilot -p "Review the current repository and summarize any issues you find. Write your complete review to review.md" \
             --allow-tool=write \
             --no-ask-user
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          # GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Comment review on PR
         run: gh pr comment "${{ github.event.pull_request.number }}" --body-file review.md
