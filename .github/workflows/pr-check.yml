@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Copilot CLI
         run: |
-          copilot -p "Review the current repository and summarize any issues you find. Write your complete review to review.md" \
+          copilot -p "Review the current repository and summarize any issues you find.  Write your complete review to review.md" \
             --allow-tool=write \
             --no-ask-user
         env:
